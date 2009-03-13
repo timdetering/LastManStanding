@@ -1,0 +1,191 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{872DFDAD-8071-47BC-8C44-C8134199F4A0}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>LastManStanding</RootNamespace>
+    <AssemblyName>LastManStanding</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkSubset>Client</TargetFrameworkSubset>
+    <StartupObject>
+    </StartupObject>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="libtcodWrapper, Version=0.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Lib\Libtcod\libtcodWrapper.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Domain\Actors\Actor.cs" />
+    <Compile Include="Domain\AI\DiggerBrain.cs" />
+    <Compile Include="Domain\AI\HunterBrain.cs" />
+    <Compile Include="Domain\AI\NullBrain.cs" />
+    <Compile Include="Domain\AI\PlayerAI.cs" />
+    <Compile Include="Domain\AI\ThreatModel.cs" />
+    <Compile Include="Domain\AI\ZombieBrain.cs" />
+    <Compile Include="Domain\Commands\AttackCommand.cs" />
+    <Compile Include="Domain\Commands\CommandFactory.cs" />
+    <Compile Include="Domain\Commands\CommandResult.cs" />
+    <Compile Include="Domain\Commands\ICommand.cs" />
+    <Compile Include="Domain\Commands\MoveCommand.cs" />
+    <Compile Include="Domain\Commands\NullCommand.cs" />
+    <Compile Include="Domain\Commands\OpenDoorCommand.cs" />
+    <Compile Include="Domain\Commands\SkipTurnCommand.cs" />
+    <Compile Include="Domain\DataConverter.cs" />
+    <Compile Include="Domain\Movement\MovementProfiles\DiggerMovement.cs" />
+    <Compile Include="Extensions.cs" />
+    <Compile Include="Domain\FieldOfView\FovProfiles\NightVisionFov.cs" />
+    <Compile Include="Domain\Materials\Flesh.cs" />
+    <Compile Include="Domain\Materials\IMaterial.cs" />
+    <Compile Include="Domain\Materials\Rock.cs" />
+    <Compile Include="Domain\Materials\Wood.cs" />
+    <Compile Include="Domain\SerializationHelper.cs" />
+    <Compile Include="Domain\Terrain\Connector.cs" />
+    <Compile Include="Domain\Terrain\DungeonGenerator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Domain\Terrain\DungeonPrefab.cs" />
+    <Compile Include="Domain\Terrain\Generation\CorridorGeneration\HuntAndKill\Cell.cs" />
+    <Compile Include="Domain\Terrain\Generation\CorridorGeneration\HuntAndKill\CellDungeon.cs" />
+    <Compile Include="Domain\Terrain\Generation\CorridorGeneration\HuntAndKill\CellMap.cs" />
+    <Compile Include="Domain\Terrain\Generation\CorridorGeneration\HuntAndKill\CorridorGenerator.cs" />
+    <Compile Include="Domain\Terrain\Generation\CorridorGeneration\HuntAndKill\SideType.cs" />
+    <Compile Include="Domain\Terrain\Generation\CorridorGeneration\ICorridorGenerator.cs" />
+    <Compile Include="Domain\Terrain\Generation\DoorGeneration\DoorGenerator.cs" />
+    <Compile Include="Domain\Terrain\Generation\DoorGeneration\IDoorGenerator.cs" />
+    <Compile Include="Domain\Terrain\Generation\RoomGeneration\IRoomGenerator.cs" />
+    <Compile Include="Domain\Terrain\Generation\RoomGeneration\PrefabRoomGenerator.cs" />
+    <Compile Include="Domain\Terrain\Generation\RoomGeneration\RoomGenerator.cs" />
+    <Compile Include="Domain\Terrain\TerrainTypes\Door.cs" />
+    <Compile Include="Domain\Terrain\TerrainTypes\DoorStates.cs" />
+    <Compile Include="Domain\Terrain\TerrainTypes\Floor.cs" />
+    <Compile Include="Domain\Terrain\TerrainTypes\ITerrain.cs" />
+    <Compile Include="Domain\Terrain\TerrainTypes\Wall.cs" />
+    <Compile Include="Domain\FieldOfView\FovObject.cs" />
+    <Compile Include="Domain\FieldOfView\FovProfiles\HumanoidFov.cs" />
+    <Compile Include="Domain\FieldOfView\FovProfiles\TorchFov.cs" />
+    <Compile Include="Domain\FieldOfView\FovResultSet.cs" />
+    <Compile Include="Domain\FieldOfView\FovShapeType.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Domain\FieldOfView\IFovAlgorithm.cs" />
+    <Compile Include="Domain\FieldOfView\IFovProfile.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Domain\FieldOfView\ShadowCastingFov.cs" />
+    <Compile Include="Domain\FieldOfView\VisibilityMap.cs" />
+    <Compile Include="Domain\FieldOfView\VisibilityObject.cs" />
+    <Compile Include="Domain\Game.cs" />
+    <Compile Include="Domain\GameEvent.cs" />
+    <Compile Include="Domain\GameTurn.cs" />
+    <Compile Include="Domain\Actors\IActor.cs" />
+    <Compile Include="Domain\AI\IIntellect.cs" />
+    <Compile Include="Domain\IComposite.cs" />
+    <Compile Include="Domain\IGameObject.cs" />
+    <Compile Include="Domain\ILocatable.cs" />
+    <Compile Include="Domain\ILocation.cs" />
+    <Compile Include="Domain\Lighting\AttenuationFunction.cs" />
+    <Compile Include="Domain\Lighting\LightingObject.cs" />
+    <Compile Include="Domain\Lighting\LightMap.cs" />
+    <Compile Include="Domain\Lighting\LightSource.cs" />
+    <Compile Include="Domain\Location.cs" />
+    <Compile Include="Domain\Map.cs" />
+    <Compile Include="Domain\MersenneTwister.cs" />
+    <Compile Include="Domain\Movement\AStar\AStarPathFinding.cs" />
+    <Compile Include="Domain\Movement\AStar\AStarPath.cs" />
+    <Compile Include="Domain\Movement\Direction.cs" />
+    <Compile Include="Domain\Movement\DirectionPicker.cs" />
+    <Compile Include="Domain\Movement\MovementProfiles\HumanoidMovement.cs" />
+    <Compile Include="Domain\Movement\IMovementProfile.cs" />
+    <Compile Include="Domain\Movement\IPathfindingAlgorithm.cs" />
+    <Compile Include="Domain\Movement\MovementPath.cs" />
+    <Compile Include="Domain\Movement\PathFindingNode.cs" />
+    <Compile Include="Domain\PriorityQueue.cs" />
+    <Compile Include="Domain\Races\IRace.cs" />
+    <Compile Include="Domain\Races\Race.cs" />
+    <Compile Include="Domain\Rng.cs" />
+    <Compile Include="Domain\Terrain\TerrainMap.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="celtic_garamond_10x10_gs_tc.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="LIBTCOD-LICENSE.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="libtcod.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="LICENSE.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="README-SDL.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Readme.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SDL.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="zlib1.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="libSDL.so">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="libtcod.so">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

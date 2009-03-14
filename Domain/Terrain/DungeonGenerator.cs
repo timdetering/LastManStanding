@@ -16,11 +16,26 @@ using LastManStanding.Domain.Terrain.Generation.CorridorGeneration;
 using LastManStanding.Domain.Terrain.Generation.DoorGeneration;
 using LastManStanding.Domain.Terrain.Generation.RoomGeneration;
 using LastManStanding.Domain.Terrain.TerrainTypes;
+using log4net;
 
 namespace LastManStanding.Domain.Terrain
 {
     public class DungeonGenerator
     {
+        private static ILog logger;
+        private static ILog Logger
+        {
+            get
+            {
+                if (logger == null)
+                {
+                    log4net.Config.XmlConfigurator.Configure();
+                    logger = LogManager.GetLogger(typeof(DungeonGenerator));
+                }
+                return logger;
+            }
+        }
+
         public Size MinSize { get; set; }
         public Size MaxSize { get; set; }
         public ICorridorGenerator CorridorGenerator { get; set; }
@@ -32,47 +47,55 @@ namespace LastManStanding.Domain.Terrain
 
         public void Generate(Game gameInstance)
         {
-            System.Console.WriteLine("Generating dungeon...");
-
-            System.Console.WriteLine("Generating terrain...");
-            gameInstance.Terrain = new TerrainMap(Rng.Next(MinSize.Width, MaxSize.Width),
-                                         Rng.Next(MinSize.Height, MaxSize.Height), () => new Wall() {Material = new Rock()});
-
-
-            if (CorridorGenerator != null)
+            try
             {
-                System.Console.WriteLine("Generating corridors...");
-                CorridorGenerator.GenerateCorridors(gameInstance.Terrain);
+                Logger.Info("Generating dungeon...");
+
+                Logger.Info("Generating terrain...");
+                gameInstance.Terrain = new TerrainMap(Rng.Next(MinSize.Width, MaxSize.Width),
+                                             Rng.Next(MinSize.Height, MaxSize.Height), () => new Wall() { Material = new Rock() });
+
+
+                if (CorridorGenerator != null)
+                {
+                    Logger.Info("Generating corridors...");
+                    CorridorGenerator.GenerateCorridors(gameInstance.Terrain);
+                }
+                if (RoomGenerator != null)
+                {
+                    Logger.Info("Generating rooms...");
+                    RoomGenerator.GenerateRooms(gameInstance.Terrain);
+                }
+                if (DoorGenerator != null)
+                {
+                    Logger.Info("Generating doors...");
+                    DoorGenerator.GenerateDoors(gameInstance.Terrain);
+                }
+
+                WalkTheDungeon(gameInstance);
+
+                if (DoorGenerator != null)
+                {
+                    DoorGenerator.RemoveInvalidDoors(gameInstance.Terrain);
+                    DoorGenerator.ResetDoors(gameInstance.Terrain);
+                }
+
+                //if (StairGenerator != null) StairGenerator.GenerateStairs(dungeon);
+                //if (TreasureGenerator != null) TreasureGenerator.GenerateTreasure(dungeon);
+                //if (MonsterGenerator != null) MonsterGenerator.GenerateMonsters(dungeon);
+
+                Logger.Info("Dungeon generation complete.");
             }
-            if (RoomGenerator != null)
+            catch (Exception ex)
             {
-                System.Console.WriteLine("Generating rooms...");
-                RoomGenerator.GenerateRooms(gameInstance.Terrain);
+                Logger.Error("An error occurred during dungeon generation", ex);
+                throw;
             }
-            if (DoorGenerator != null)
-            {
-                System.Console.WriteLine("Generating doors...");
-                DoorGenerator.GenerateDoors(gameInstance.Terrain);
-            }
-
-            WalkTheDungeon(gameInstance);
-
-            if (DoorGenerator != null)
-            {
-                DoorGenerator.RemoveInvalidDoors(gameInstance.Terrain);
-                DoorGenerator.ResetDoors(gameInstance.Terrain);
-            }
-
-            //if (StairGenerator != null) StairGenerator.GenerateStairs(dungeon);
-            //if (TreasureGenerator != null) TreasureGenerator.GenerateTreasure(dungeon);
-            //if (MonsterGenerator != null) MonsterGenerator.GenerateMonsters(dungeon);
-
-            System.Console.WriteLine("Dungeon generation complete.");
         }
 
         private static void WalkTheDungeon(Game gameInstance)
         {
-            System.Console.WriteLine("Walking the dungeon...");
+            Logger.Info("Walking the dungeon...");
             var digger = new Actor()
                              {
                                  Race =
@@ -104,7 +127,7 @@ namespace LastManStanding.Domain.Terrain
             }
 
             gameInstance.RemoveActor(digger);
-            System.Console.WriteLine("Dungeon walk complete.");
+            Logger.Info("Dungeon walk complete.");
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using libtcodWrapper;
@@ -15,19 +16,35 @@ using LastManStanding.Domain.Terrain;
 using LastManStanding.Domain.Terrain.Generation.CorridorGeneration.HuntAndKill;
 using LastManStanding.Domain.Terrain.Generation.DoorGeneration;
 using LastManStanding.Domain.Terrain.Generation.RoomGeneration;
+using log4net;
 using Color=libtcodWrapper.Color;
+using Console=libtcodWrapper.Console;
 
 namespace LastManStanding
 {
     internal class Program
     {
+        private static ILog logger;
+        private static ILog Logger
+        {
+            get
+            {
+                if (logger == null)
+                {
+                    log4net.Config.XmlConfigurator.Configure();
+                    logger = LogManager.GetLogger(typeof(Program));
+                }
+                return logger;
+            }
+        }
+
         private static Game CreateGame()
         {
-            System.Console.WriteLine("Creating new game...");
+            Logger.Info("Creating new game...");
             var game = new Game();
             var humanoidMovement = new HumanoidMovement();
 
-            System.Console.WriteLine("Creating races...");
+            Logger.Info("Creating races...");
             var human = new Race
             {
                 Symbol = 'H',
@@ -82,7 +99,7 @@ namespace LastManStanding
 
             List<Point> walkableLocations = game.Terrain.WalkableLocations(humanoidMovement).ToList();
 
-            System.Console.WriteLine("Creating player...");
+            Logger.Info("Creating player...");
             var player = new Actor
             {
                 Name = "Player",
@@ -105,7 +122,7 @@ namespace LastManStanding
 
             game.AddActor(player, true);
 
-            System.Console.WriteLine("Creating monsters...");
+            Logger.Info("Creating monsters...");
             var monsters = new List<IActor>
                                {
                                    new Actor
@@ -154,17 +171,19 @@ namespace LastManStanding
                 game.AddActor(monster);
             }
 
-            System.Console.WriteLine("Game created.");
+            Logger.Info("Game created.");
             return game;
         }
 
         private static void Main(string[] args)
         {
+            AppDomain.CurrentDomain.UnhandledException += (CurrentDomain_UnhandledException);
             Color fogOfWarColour = Color.FromRGB(80, 80, 80);
 
             
             var game = CreateGame();
 
+            Logger.Info("Initializing RootConsole...");
             RootConsole.Width = 124;
             RootConsole.Height = 80;
             RootConsole.Fullscreen = false;
@@ -174,16 +193,22 @@ namespace LastManStanding
             RootConsole.WindowTitle = "Last Man Standing v1.0";
             RootConsole rootConsole = RootConsole.GetInstance();
 
+            Logger.Info("Initializing playConsole...");
             Console playConsole = RootConsole.GetNewConsole(78, 78);
+            Logger.Info("Initializing threatConsole...");
             Console threatConsole = RootConsole.GetNewConsole(42, 10);
+            Logger.Info("Initializing playerConsole...");
             Console playerConsole = RootConsole.GetNewConsole(42, 6);
+            Logger.Info("Initializing competitorConsole...");
             Console competitorConsole = RootConsole.GetNewConsole(42, 17);
+            Logger.Info("Initializing eventsConsole...");
             Console eventsConsole = RootConsole.GetNewConsole(42, 38);
 
+            Logger.Info("Starting Game Loop...");
             do
             {
                 KeyPress key = Keyboard.CheckForKeypress(KeyPressType.Pressed);
-
+                
                 if (game.IsActive)
                 {
                     game.ProcessTurn();
@@ -213,6 +238,16 @@ namespace LastManStanding
                     return;
 
             } while (!rootConsole.IsWindowClosed());
+        }
+
+        static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            var exception = e.ExceptionObject as Exception;
+            if (exception != null)
+            {
+                Logger.Error("An exception occurred", exception);
+            }
+            
         }
 
         private static void RenderAllConsoles(Game game, Console rootConsole, Console playConsole, Color fogOfWarColour,

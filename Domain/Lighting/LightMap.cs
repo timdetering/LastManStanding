@@ -50,8 +50,23 @@ namespace LastManStanding.Domain.Lighting
                                          litTile.DistanceFromOrigin)));
 
                     this[litTile.Location.Coordinate].Colour = AlphaBlendColours(intensity, this[litTile.Location.Coordinate].Colour, lightSource.Colour);
+                    //this[litTile.Location.Coordinate].Colour = FromLibtcodColor(
+                    //    libtcodWrapper.Color.Interpolate(ToLibtcodColor(this[litTile.Location.Coordinate].Colour), ToLibtcodColor(lightSource.Colour),
+                    //                                     intensity));
+
+                    
                 }
             }
+        }
+
+        private static libtcodWrapper.Color ToLibtcodColor(Color source)
+        {
+            return libtcodWrapper.Color.FromRGB(source.R, source.G, source.B);
+        }
+
+        private static Color FromLibtcodColor(libtcodWrapper.Color source)
+        {
+            return Color.FromArgb(1, source.Red, source.Green, source.Blue);
         }
 
         private static Color AlphaBlendColours(float alpha, Color source, Color destination)

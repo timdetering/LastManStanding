@@ -11,7 +11,7 @@ namespace LastManStanding.Domain.FieldOfView.FovProfiles
     {
         public FovShapeType FovShape { get { return FovShapeType.Square; } }
 
-        private int fovRadius = 10;
+        private int fovRadius = 20;
         public int FovRadius
         {
             get { return fovRadius; }

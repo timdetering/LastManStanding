@@ -56,8 +56,10 @@ namespace LastManStanding.Domain.AI
 
         public IEnumerable<IActor> IdentifyThreats(IEnumerable<IActor> actors)
         {
+            return actors.Where(x => (x != Host));
+
             // We return the last threat regardless of whether we can see it
-            return actors.Count() == 2 ? actors.Where(x => (x != Host)) : actors.Where(x => (x != Host) && (Host.VisibilityMap[x.Location.Coordinate].IsVisible));
+            //return actors.Count() == 2 ? actors.Where(x => (x != Host)) : actors.Where(x => (x != Host) && (Host.VisibilityMap[x.Location.Coordinate].IsVisible));
         }
 
         public IActor Host

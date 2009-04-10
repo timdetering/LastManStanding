@@ -114,7 +114,7 @@ namespace LastManStanding
                                                    {
                                                        Attenuation =
                                                            new AttenuationFunction
-                                                               {Constant = 1, Linear = 0.3f, Quadratic = 0},
+                                                               {Constant = 1, Linear = 0.15f, Quadratic = 0},
                                                        Colour = System.Drawing.Color.Gold,
                                                        FovProfile = new TorchFov(),
                                                        Location = new Location()
@@ -136,16 +136,7 @@ namespace LastManStanding
                                            Health = 10,
                                            MaxHealth = 10,
                                            Speed = 10,
-                                           Race = tank,
-                                           LightSource = new LightSource
-                                                             {
-                                                                 Attenuation =
-                                                                     new AttenuationFunction
-                                                                         {Constant = 1, Linear = 0.3f, Quadratic = 0},
-                                                                 Colour = System.Drawing.Color.Silver,
-                                                                 FovProfile = new TorchFov(),
-                                                                 Location = new Location()
-                                                             }
+                                           Race = tank
                                        },
                                    new Actor
                                        {
@@ -154,16 +145,7 @@ namespace LastManStanding
                                            Health = 1,
                                            MaxHealth = 1,
                                            Speed = 10,
-                                           Race = dps,
-                                           LightSource = new LightSource
-                                                             {
-                                                                 Attenuation =
-                                                                     new AttenuationFunction
-                                                                         {Constant = 1, Linear = 0.3f, Quadratic = 0},
-                                                                 Colour = System.Drawing.Color.Orange,
-                                                                 FovProfile = new TorchFov(),
-                                                                 Location = new Location()
-                                                             }
+                                           Race = dps
                                        },
                                    new Actor
                                        {
@@ -172,16 +154,7 @@ namespace LastManStanding
                                            Health = 10,
                                            MaxHealth = 10,
                                            Speed = 10,
-                                           Race = tank,
-                                           LightSource = new LightSource
-                                                             {
-                                                                 Attenuation =
-                                                                     new AttenuationFunction
-                                                                         {Constant = 1, Linear = 0.3f, Quadratic = 0},
-                                                                 Colour = System.Drawing.Color.Azure,
-                                                                 FovProfile = new TorchFov(),
-                                                                 Location = new Location()
-                                                             }
+                                           Race = tank
                                        },
                                    new Actor
                                        {
@@ -190,16 +163,7 @@ namespace LastManStanding
                                            Health = 1,
                                            MaxHealth = 1,
                                            Speed = 10,
-                                           Race = dps,
-                                           LightSource = new LightSource
-                                                             {
-                                                                 Attenuation =
-                                                                     new AttenuationFunction
-                                                                         {Constant = 1, Linear = 0.3f, Quadratic = 0},
-                                                                 Colour = System.Drawing.Color.HotPink,
-                                                                 FovProfile = new TorchFov(),
-                                                                 Location = new Location()
-                                                             }
+                                           Race = dps
                                        },
                                    new Actor
                                        {
@@ -208,16 +172,7 @@ namespace LastManStanding
                                            Health = 10,
                                            MaxHealth = 10,
                                            Speed = 10,
-                                           Race = tank,
-                                           LightSource = new LightSource
-                                                             {
-                                                                 Attenuation =
-                                                                     new AttenuationFunction
-                                                                         {Constant = 1, Linear = 0.3f, Quadratic = 0},
-                                                                 Colour = System.Drawing.Color.Green,
-                                                                 FovProfile = new TorchFov(),
-                                                                 Location = new Location()
-                                                             }
+                                           Race = tank
                                        },
                                    new Actor
                                        {
@@ -226,16 +181,7 @@ namespace LastManStanding
                                            Health = 1,
                                            MaxHealth = 1,
                                            Speed = 10,
-                                           Race = dps,
-                                           LightSource = new LightSource
-                                                             {
-                                                                 Attenuation =
-                                                                     new AttenuationFunction
-                                                                         {Constant = 1, Linear = 0.3f, Quadratic = 0},
-                                                                 Colour = System.Drawing.Color.CornflowerBlue,
-                                                                 FovProfile = new TorchFov(),
-                                                                 Location = new Location()
-                                                             }
+                                           Race = dps
                                        },
                                    new Actor
                                        {
@@ -244,16 +190,7 @@ namespace LastManStanding
                                            Health = 10,
                                            MaxHealth = 10,
                                            Speed = 10,
-                                           Race = tank,
-                                           LightSource = new LightSource
-                                                             {
-                                                                 Attenuation =
-                                                                     new AttenuationFunction
-                                                                         {Constant = 1, Linear = 0.3f, Quadratic = 0},
-                                                                 Colour = System.Drawing.Color.Blue,
-                                                                 FovProfile = new TorchFov(),
-                                                                 Location = new Location()
-                                                             }
+                                           Race = tank
                                        },
                                    new Actor
                                        {
@@ -262,16 +199,53 @@ namespace LastManStanding
                                            Health = 1,
                                            MaxHealth = 1,
                                            Speed = 10,
-                                           Race = dps,
-                                           LightSource = new LightSource
-                                                             {
-                                                                 Attenuation =
-                                                                     new AttenuationFunction
-                                                                         {Constant = 1, Linear = 0.3f, Quadratic = 0},
-                                                                 Colour = System.Drawing.Color.Red,
-                                                                 FovProfile = new TorchFov(),
-                                                                 Location = new Location()
-                                                             }
+                                           Race = dps
+                                       }
+                                       ,
+                                   new Actor
+                                       {
+                                           Name = "Katrina",
+                                           Damage = 5,
+                                           Health = 5,
+                                           MaxHealth = 5,
+                                           Speed = 10,
+                                           Race = dps
+                                       },
+                                   new Actor
+                                       {
+                                           Name = "Melissa",
+                                           Damage = 5,
+                                           Health = 5,
+                                           MaxHealth = 5,
+                                           Speed = 10,
+                                           Race = tank
+                                       },
+                                   new Actor
+                                       {
+                                           Name = "Isabel",
+                                           Damage = 5,
+                                           Health = 5,
+                                           MaxHealth = 5,
+                                           Speed = 10,
+                                           Race = dps
+                                       },
+                                   new Actor
+                                       {
+                                           Name = "Angela",
+                                           Damage = 5,
+                                           Health = 5,
+                                           MaxHealth = 5,
+                                           Speed = 10,
+                                           Race = tank
+                                       },
+                                   new Actor
+                                       {
+                                           Name = "Janet",
+                                           Damage = 5,
+                                           Health = 5,
+                                           MaxHealth = 5,
+                                           Speed = 10,
+                                           Race = dps
                                        }
                                };
 
@@ -297,11 +271,11 @@ namespace LastManStanding
             int infoPanelWidth = 42;
             var playBounds = new Rectangle(0, 0, screenBounds.Width - infoPanelWidth, screenBounds.Height);
             var playerBounds = new Rectangle(playBounds.Right, 0, infoPanelWidth, 6);
-            var threatBounds = new Rectangle(playBounds.Right, playerBounds.Bottom, infoPanelWidth, 10);
-            var competitorBounds = new Rectangle(playBounds.Right, threatBounds.Bottom, infoPanelWidth, 17);
+            //var threatBounds = new Rectangle(playBounds.Right, playerBounds.Bottom, infoPanelWidth, 10);
+            var competitorBounds = new Rectangle(playBounds.Right, playerBounds.Bottom, infoPanelWidth, 27);
             var eventBounds = new Rectangle(playBounds.Right, competitorBounds.Bottom, infoPanelWidth,
                                             screenBounds.Height -
-                                            (playerBounds.Height + threatBounds.Height + competitorBounds.Height));
+                                            (playerBounds.Height + competitorBounds.Height));
 
             Game game = CreateGame();
 
@@ -319,8 +293,8 @@ namespace LastManStanding
 
             Logger.Info("Initializing playConsole...");
             Console playConsole = RootConsole.GetNewConsole(playBounds.Width, playBounds.Height);
-            Logger.Info("Initializing threatConsole...");
-            Console threatConsole = RootConsole.GetNewConsole(threatBounds.Width, threatBounds.Height);
+            //Logger.Info("Initializing threatConsole...");
+            //Console threatConsole = RootConsole.GetNewConsole(threatBounds.Width, threatBounds.Height);
             Logger.Info("Initializing playerConsole...");
             Console playerConsole = RootConsole.GetNewConsole(playerBounds.Width, playerBounds.Height);
             Logger.Info("Initializing competitorConsole...");
@@ -341,8 +315,8 @@ namespace LastManStanding
                         ((PlayerAI) game.Player.Intellect).EvaluateKeyPress(key);
                 }
 
-                RenderAllConsoles(game, rootConsole, playConsole, fogOfWarColour, playerConsole, threatConsole,
-                                  competitorConsole, eventsConsole, playBounds, playerBounds, threatBounds,
+                RenderAllConsoles(game, rootConsole, playConsole, fogOfWarColour, playerConsole,
+                                  competitorConsole, eventsConsole, playBounds, playerBounds,
                                   competitorBounds, eventBounds);
 
                 if (!game.IsActive)
@@ -375,9 +349,9 @@ namespace LastManStanding
         }
 
         private static void RenderAllConsoles(Game game, Console rootConsole, Console playConsole, Color fogOfWarColour,
-                                              Console playerConsole, Console threatConsole, Console competitorConsole,
+                                              Console playerConsole, Console competitorConsole,
                                               Console eventsConsole, Rectangle playBounds, Rectangle playerBounds,
-                                              Rectangle threatBounds, Rectangle competitorBounds, Rectangle eventBounds)
+                                              Rectangle competitorBounds, Rectangle eventBounds)
         {
             rootConsole.Clear();
             rootConsole.ForegroundColor = ColorPresets.White;
@@ -385,15 +359,15 @@ namespace LastManStanding
 
             RenderPlayConsole(game, playConsole, fogOfWarColour, playBounds);
             RenderPlayerConsole(game.Player, playerConsole, playerBounds);
-            RenderThreatConsole(game.Player, game.Actors, threatConsole, threatBounds);
+            //RenderThreatConsole(game.Player, game.Actors, threatConsole, threatBounds);
             RenderCompetitorConsole(game, competitorConsole, competitorBounds);
             RenderEventsConsole(game, eventsConsole, eventBounds);
 
             playConsole.Blit(0, 0, playBounds.Width, playBounds.Height, rootConsole, playBounds.X, playBounds.Y);
             playerConsole.Blit(0, 0, playerBounds.Width, playerBounds.Height, rootConsole, playerBounds.X,
                                playerBounds.Y);
-            threatConsole.Blit(0, 0, threatBounds.Width, threatBounds.Height, rootConsole, threatBounds.X,
-                               threatBounds.Y);
+            //threatConsole.Blit(0, 0, threatBounds.Width, threatBounds.Height, rootConsole, threatBounds.X,
+            //                   threatBounds.Y);
             competitorConsole.Blit(0, 0, competitorBounds.Width, competitorBounds.Height, rootConsole,
                                    competitorBounds.X, competitorBounds.Y);
             eventsConsole.Blit(0, 0, eventBounds.Width, eventBounds.Height, rootConsole, eventBounds.X, eventBounds.Y);
@@ -412,7 +386,7 @@ namespace LastManStanding
             {
                 console.ForegroundColor = gameInstance.AllMonstersAreDead() ? ColorPresets.Gold : ColorPresets.Red;
                 console.PrintLine(
-                    gameInstance.AllMonstersAreDead() ? "You are the last man standing!" : "You have been eliminated", 0,
+                    gameInstance.AllMonstersAreDead() ? "You are the last man standing!" : "You have been eliminated", 1,
                     i, LineAlignment.Left);
                 i++;
             }

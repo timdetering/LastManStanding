@@ -10,7 +10,7 @@ namespace LastManStanding.Domain.FieldOfView.FovProfiles
     public class TorchFov : IFovProfile
     {
         public FovShapeType FovShape { get { return FovShapeType.RoundedSquare; } }
-        private int fovRadius = 6;
+        private int fovRadius = 15;
         public int FovRadius { get { return fovRadius; } set { fovRadius = value;} }
 
         public bool LosIsBlockedByMaterial(IMaterial material)

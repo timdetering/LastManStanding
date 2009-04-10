@@ -10,7 +10,7 @@ namespace LastManStanding.Domain.FieldOfView.FovProfiles
     public class HumanoidFov : IFovProfile
     {
         public FovShapeType FovShape { get { return FovShapeType.Square; } }
-        private int fovRadius = 10;
+        private int fovRadius = 20;
         public int FovRadius { get { return fovRadius; } set { fovRadius = value; } }
 
         public bool LosIsBlockedByMaterial(IMaterial material)

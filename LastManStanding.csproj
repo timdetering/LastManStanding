@@ -74,6 +74,7 @@
     <Compile Include="Domain\Commands\OpenDoorCommand.cs" />
     <Compile Include="Domain\Commands\SkipTurnCommand.cs" />
     <Compile Include="Domain\DataConverter.cs" />
+    <Compile Include="Domain\FloodFill.cs" />
     <Compile Include="Domain\Movement\MovementProfiles\DiggerMovement.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Domain\FieldOfView\FovProfiles\NightVisionFov.cs" />

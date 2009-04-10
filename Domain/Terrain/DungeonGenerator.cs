@@ -10,6 +10,8 @@ using LastManStanding.Domain.Commands;
 using LastManStanding.Domain.FieldOfView;
 using LastManStanding.Domain.FieldOfView.FovProfiles;
 using LastManStanding.Domain.Materials;
+using LastManStanding.Domain.Movement;
+using LastManStanding.Domain.Movement.AStar;
 using LastManStanding.Domain.Movement.MovementProfiles;
 using LastManStanding.Domain.Races;
 using LastManStanding.Domain.Terrain.Generation.CorridorGeneration;
@@ -61,6 +63,7 @@ namespace LastManStanding.Domain.Terrain
                     Logger.Info("Generating corridors...");
                     CorridorGenerator.GenerateCorridors(gameInstance.Terrain);
                 }
+
                 if (RoomGenerator != null)
                 {
                     Logger.Info("Generating rooms...");
@@ -96,38 +99,126 @@ namespace LastManStanding.Domain.Terrain
         private static void WalkTheDungeon(Game gameInstance)
         {
             Logger.Info("Walking the dungeon...");
-            var digger = new Actor()
-                             {
-                                 Race =
-                                     new Race() { FovProfile = new NightVisionFov() {FovRadius = 100}, MovementProfile = new HumanoidMovement() }
-                             }; 
 
-            var walkableLocations = gameInstance.Terrain.WalkableLocations(digger.Race.MovementProfile).ToList();
-            digger.SetLocation(walkableLocations[Rng.Next(walkableLocations.Count - 1)]);
-            digger.SetIntellect(new DiggerBrain());
+            var pathFinder = new AStarPathFinding();
+            var movementProfile = new HumanoidMovement();
+            var visibilityMap = new VisibilityMap(gameInstance.Terrain.Width, gameInstance.Terrain.Height, null, null);
 
-            gameInstance.AddActor(digger);
+            var walkableLocations = gameInstance.Terrain.WalkableLocations(movementProfile).ToList();
 
-            digger.VisibilityMap.UpdateVisibilityMap(gameInstance.Terrain, gameInstance.LightMap, digger.Location.Coordinate);
-            var command = digger.Intellect.GetNextAction();
-            while (command is MoveCommand)
+            FloodFill.Fill(gameInstance.Terrain, visibilityMap, movementProfile, walkableLocations[Rng.Next(walkableLocations.Count - 1)]);
+
+            var walkableUnseenLocations = GetWalkableUnseenLocations(gameInstance.Terrain, visibilityMap, movementProfile).ToList();
+            while(walkableUnseenLocations.Count > 0)
             {
-                var result = command.Execute();
-                if ((!result.Success) && (command is MoveCommand))
+                var closestExploredLocation = GetClosestExploredLocation(gameInstance.Terrain, visibilityMap, movementProfile, walkableUnseenLocations[Rng.Next(walkableUnseenLocations.Count - 1)]);
+                var closestUnexploredLocation = GetClosestUnexploredLocation(gameInstance.Terrain, visibilityMap, movementProfile, closestExploredLocation.Value);
+
+                var movementPath = pathFinder.FindPath(gameInstance.Terrain, new List<IActor>(), new DiggerMovement(), closestExploredLocation.Value, closestUnexploredLocation.Value);
+                foreach (var node in movementPath)
                 {
-                    // The move action failed
-                    // Ask the actor for a default action on bump
-                    var defaultBumpAction = digger.Intellect.GetDefaultBumpAction((MoveCommand)command);
-                    if (defaultBumpAction != null)
-                       defaultBumpAction.Execute();
+                    gameInstance.Terrain[node.Location] = new Floor();
+                    visibilityMap[node.Location].WasSeen = true;
                 }
 
-                digger.VisibilityMap.UpdateVisibilityMap(gameInstance.Terrain, gameInstance.LightMap, digger.Location.Coordinate);
-                command = digger.Intellect.GetNextAction();
+                visibilityMap[closestUnexploredLocation.Value].WasSeen = false;
+                FloodFill.Fill(gameInstance.Terrain, visibilityMap, movementProfile, closestUnexploredLocation.Value);
+
+                walkableUnseenLocations = GetWalkableUnseenLocations(gameInstance.Terrain, visibilityMap, movementProfile).ToList();
             }
 
-            gameInstance.RemoveActor(digger);
+
+            //digger.VisibilityMap.UpdateVisibilityMap(gameInstance.Terrain, gameInstance.LightMap, digger.Location.Coordinate);
+            //var command = digger.Intellect.GetNextAction();
+            //while (command is MoveCommand)
+            //{
+            //    var result = command.Execute();
+            //    if ((!result.Success) && (command is MoveCommand))
+            //    {
+            //        // The move action failed
+            //        // Ask the actor for a default action on bump
+            //        var defaultBumpAction = digger.Intellect.GetDefaultBumpAction((MoveCommand)command);
+            //        if (defaultBumpAction != null)
+            //           defaultBumpAction.Execute();
+            //    }
+
+            //    digger.VisibilityMap.UpdateVisibilityMap(gameInstance.Terrain, gameInstance.LightMap, digger.Location.Coordinate);
+            //    command = digger.Intellect.GetNextAction();
+            //}
+
+            //gameInstance.RemoveActor(digger);
             Logger.Info("Dungeon walk complete.");
         }
+
+        private static Point? GetClosestExploredLocation(TerrainMap terrainMap, VisibilityMap visibilityMap, IMovementProfile movementProfile, Point location)
+        {
+            int distance = int.MaxValue;
+            Point? closestLocation = null;
+
+            foreach (var visibleLocation in GetWalkableSeenLocations(terrainMap, visibilityMap, movementProfile))
+            {
+                int currentDistance = location.DistanceTo(visibleLocation);
+                if (currentDistance >= distance) continue;
+
+                distance = currentDistance;
+                closestLocation = visibleLocation;
+            }
+
+            return closestLocation;
+        }
+
+        private static Point? GetClosestUnexploredLocation(TerrainMap terrainMap, VisibilityMap visibilityMap, IMovementProfile movementProfile, Point location)
+        {
+            int closestDistance = int.MaxValue;
+            Point? closestLocation = null;
+
+            // We want to explore rooms before we explore corridors
+            DungeonPrefab currentRoom = terrainMap.GetPrefabAtLocation(location);
+
+            // If we are in a room then get the closest unseen location in the room
+            foreach (
+                Point unseenLocation in
+                    currentRoom == null
+                        ? GetWalkableUnseenLocations(terrainMap, visibilityMap, movementProfile)
+                        : GetWalkableUnseenLocationsWithinPrefab(currentRoom, terrainMap, visibilityMap, movementProfile))
+            {
+                int currentDistance = location.DistanceTo(unseenLocation);
+                if (currentDistance >= closestDistance) continue;
+
+                closestDistance = currentDistance;
+                closestLocation = unseenLocation;
+            }
+
+            return closestLocation;
+        }
+
+
+        private static IEnumerable<Point> GetWalkableUnseenLocationsWithinPrefab(Map<ITerrain> prefab, TerrainMap terrainMap, VisibilityMap visibilityMap, IMovementProfile movementProfile)
+        {
+            IEnumerable<Point> unseenLocationsInPrefab = from location in prefab.Locations
+                                                         where
+                                                             movementProfile.TerrainIsTraversable(
+                                                                 terrainMap[location]) &&
+                                                             !visibilityMap[location].WasSeen
+                                                         select location;
+
+            // Return any unseen locations within the prefab else return the closest unseen location on the map
+            return unseenLocationsInPrefab.Count() > 0 ? unseenLocationsInPrefab : GetWalkableUnseenLocations(terrainMap, visibilityMap, movementProfile);
+        }
+
+        private static IEnumerable<Point> GetWalkableUnseenLocations(TerrainMap terrainMap, VisibilityMap visibilityMap, IMovementProfile movementProfile)
+        {
+            return from location in visibilityMap.GetUnseenLocations()
+                   where movementProfile.TerrainIsTraversable(terrainMap[location])
+                   select location;
+        }
+
+        private static IEnumerable<Point> GetWalkableSeenLocations(TerrainMap terrainMap, VisibilityMap visibilityMap, IMovementProfile movementProfile)
+        {
+            return from location in visibilityMap.GetSeenLocations()
+                   where movementProfile.TerrainIsTraversable(terrainMap[location])
+                   select location;
+        }
+ 
     }
 }

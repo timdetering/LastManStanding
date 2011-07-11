@@ -249,8 +249,12 @@ namespace LastManStanding
             AppDomain.CurrentDomain.UnhandledException += (CurrentDomain_UnhandledException);
             TCODColor fogOfWarColour = new TCODColor(80, 80, 80);
 
-            var screenBounds = new Rectangle(0, 0, Screen.PrimaryScreen.Bounds.Width/10,
-                                             Screen.PrimaryScreen.Bounds.Height/10);
+            //string font = "celtic_garamond_10x10_gs_tc.png"; 
+            string font = "arial12x12.png";
+            int fontWidth = 12;
+            int fontHeight = 12;
+            var screenBounds = new Rectangle(0, 0, Screen.PrimaryScreen.Bounds.Width/fontWidth,
+                                             Screen.PrimaryScreen.Bounds.Height/fontHeight);
 
             int infoPanelWidth = 42;
             var playBounds = new Rectangle(0, 0, screenBounds.Width - infoPanelWidth, screenBounds.Height);
@@ -265,11 +269,9 @@ namespace LastManStanding
 
             Logger.Info("Initializing RootConsole...");
 
-            TCODConsole.setCustomFont(
-                "dwd.png",
-                (int)(TCODFontFlags.LayoutAsciiInRow),
-                16,
-                16);
+            
+
+            TCODConsole.setCustomFont(font, (int)(TCODFontFlags.Grayscale | TCODFontFlags.LayoutTCOD), 32, 8);
             TCODConsole.initRoot(screenBounds.Width, screenBounds.Height, "Last Man Standing v1.0", true, TCODRendererType.SDL);
 
             TCODSystem.setFps(30);

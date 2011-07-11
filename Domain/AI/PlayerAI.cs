@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
-using libtcodWrapper;
 using LastManStanding.Domain.Actors;
 using LastManStanding.Domain.Commands;
 using LastManStanding.Domain.Movement;
 using LastManStanding.Domain.Terrain.TerrainTypes;
+using libtcod;
 
 namespace LastManStanding.Domain.AI
 {
@@ -52,46 +52,46 @@ namespace LastManStanding.Domain.AI
         }
 
         private readonly Queue<ICommand> commandBuffer = new Queue<ICommand>();
-        private readonly Queue<KeyPress> keyBuffer = new Queue<KeyPress>();
+        private readonly Queue<TCODKey> keyBuffer = new Queue<TCODKey>();
 
-        private void AddKeyPressToBuffer(KeyPress keyPress)
+        private void AddKeyPressToBuffer(TCODKey keyPress)
         {
             switch (keyPress.KeyCode)
             {
-                case KeyCode.TCODK_UP:
-                case KeyCode.TCODK_LEFT:
-                case KeyCode.TCODK_RIGHT:
-                case KeyCode.TCODK_DOWN:
-                case KeyCode.TCODK_ENTER:
-                case KeyCode.TCODK_KP1:
-                case KeyCode.TCODK_KP2:
-                case KeyCode.TCODK_KP3:
-                case KeyCode.TCODK_KP4:
-                case KeyCode.TCODK_KP5:
-                case KeyCode.TCODK_KP6:
-                case KeyCode.TCODK_KP7:
-                case KeyCode.TCODK_KP8:
-                case KeyCode.TCODK_KP9:
+                case TCODKeyCode.Up:
+                case TCODKeyCode.Left:
+                case TCODKeyCode.Right:
+                case TCODKeyCode.Down:
+                case TCODKeyCode.Enter:
+                case TCODKeyCode.KeypadOne:
+                case TCODKeyCode.KeypadTwo:
+                case TCODKeyCode.KeypadThree:
+                case TCODKeyCode.KeypadFour:
+                case TCODKeyCode.KeypadFive:
+                case TCODKeyCode.KeypadSix:
+                case TCODKeyCode.KeypadSeven:
+                case TCODKeyCode.KeypadEight:
+                case TCODKeyCode.KeypadNine:
                     keyBuffer.Enqueue(keyPress);
                     break;
-                case KeyCode.TCODK_CHAR:
+                case TCODKeyCode.Char:
 
-                    switch (keyPress.Character)
-                    {
-                        case 101:
-                        case 113:
-                        case 119:
-                        case 100:
-                        case 97:
-                        case 115:
-                        case 99:
-                        case 120:
-                        case 122:
-                            keyBuffer.Enqueue(keyPress);
-                            break;
-                        default:
-                            break;
-                    }
+                    //switch (keyPress.Character)
+                    //{
+                    //    case 101:
+                    //    case 113:
+                    //    case 119:
+                    //    case 100:
+                    //    case 97:
+                    //    case 115:
+                    //    case 99:
+                    //    case 120:
+                    //    case 122:
+                    //        keyBuffer.Enqueue(keyPress);
+                    //        break;
+                    //    default:
+                    //        break;
+                    //}
 
                     break;
                 default:
@@ -99,9 +99,9 @@ namespace LastManStanding.Domain.AI
             }
         }
 
-        public void EvaluateKeyPress(KeyPress keyPress)
+        public void EvaluateKeyPress(TCODKey keyStroke)
         {
-            AddKeyPressToBuffer(keyPress);
+            AddKeyPressToBuffer(keyStroke);
             ProcessKeyPressBuffer();
         }
 
@@ -112,47 +112,47 @@ namespace LastManStanding.Domain.AI
             var firstKeyPress = keyBuffer.Peek();
             switch(firstKeyPress.KeyCode)
             {
-                case KeyCode.TCODK_KP9:
+                case TCODKeyCode.KeypadNine:
                     commandBuffer.Enqueue(commandFactory.BuildMoveCommand(Host, Direction.Northeast));
                     keyBuffer.Dequeue();
                     break;
-                case KeyCode.TCODK_KP7:
+                case TCODKeyCode.KeypadSeven:
                     commandBuffer.Enqueue(commandFactory.BuildMoveCommand(Host, Direction.Northwest));
                     keyBuffer.Dequeue();
                     break;
-                case KeyCode.TCODK_UP:
-                case KeyCode.TCODK_KP8:
+                case TCODKeyCode.Up:
+                case TCODKeyCode.KeypadEight:
                     commandBuffer.Enqueue(commandFactory.BuildMoveCommand(Host, Direction.North));
                     keyBuffer.Dequeue();
                     break;
-                case KeyCode.TCODK_LEFT:
-                case KeyCode.TCODK_KP4:
+                case TCODKeyCode.Left:
+                case TCODKeyCode.KeypadFour:
                     commandBuffer.Enqueue(commandFactory.BuildMoveCommand(Host, Direction.West));
                     keyBuffer.Dequeue();
                     break;
-                case KeyCode.TCODK_RIGHT:
-                case KeyCode.TCODK_KP6:
+                case TCODKeyCode.Right:
+                case TCODKeyCode.KeypadSix:
                     commandBuffer.Enqueue(commandFactory.BuildMoveCommand(Host, Direction.East));
                     keyBuffer.Dequeue();
                     break;
-                case KeyCode.TCODK_DOWN:
-                case KeyCode.TCODK_KP2:
+                case TCODKeyCode.Down:
+                case TCODKeyCode.KeypadTwo:
                     commandBuffer.Enqueue(commandFactory.BuildMoveCommand(Host, Direction.South));
                     keyBuffer.Dequeue();
                     break;
-                case KeyCode.TCODK_KP5:
+                case TCODKeyCode.KeypadFive:
                     commandBuffer.Enqueue(new SkipTurnCommand(Host));
                     keyBuffer.Dequeue();
                     break;
-                case KeyCode.TCODK_KP3:
+                case TCODKeyCode.KeypadThree:
                     commandBuffer.Enqueue(commandFactory.BuildMoveCommand(Host, Direction.Southeast));
                     keyBuffer.Dequeue();
                     break;
-                case KeyCode.TCODK_KP1:
+                case TCODKeyCode.KeypadOne:
                     commandBuffer.Enqueue(commandFactory.BuildMoveCommand(Host, Direction.Southwest));
                     keyBuffer.Dequeue();
                     break;
-                case KeyCode.TCODK_ENTER:
+                case TCODKeyCode.Enter:
                     if (keyBuffer.Count == 1) return;
 
                     // Remove the first keypress
@@ -162,66 +162,66 @@ namespace LastManStanding.Domain.AI
                     var secondKeyPress = keyBuffer.Dequeue();
                     switch (secondKeyPress.KeyCode)
                     {
-                        case KeyCode.TCODK_KP7:
+                        case TCODKeyCode.KeypadSeven:
                             direction = Direction.Northwest;
                             break;
-                        case KeyCode.TCODK_KP9:
+                        case TCODKeyCode.KeypadNine:
                             direction = Direction.Northeast;
                             break;
-                        case KeyCode.TCODK_KP1:
+                        case TCODKeyCode.KeypadOne:
                             direction = Direction.Southwest;
                             break;
-                        case KeyCode.TCODK_KP3:
+                        case TCODKeyCode.KeypadThree:
                             direction = Direction.Southeast;
                             break;
-                        case KeyCode.TCODK_UP:
-                        case KeyCode.TCODK_KP8:
+                        case TCODKeyCode.Up:
+                        case TCODKeyCode.KeypadEight:
                             direction = Direction.North;
                             break;
-                        case KeyCode.TCODK_LEFT:
-                        case KeyCode.TCODK_KP4:
+                        case TCODKeyCode.Left:
+                        case TCODKeyCode.KeypadFour:
                             direction = Direction.West;
                             break;
-                        case KeyCode.TCODK_RIGHT:
-                        case KeyCode.TCODK_KP6:
+                        case TCODKeyCode.Right:
+                        case TCODKeyCode.KeypadSix:
                             direction = Direction.East;
                             break;
-                        case KeyCode.TCODK_DOWN:
-                        case KeyCode.TCODK_KP2:
+                        case TCODKeyCode.Down:
+                        case TCODKeyCode.KeypadTwo:
                             direction = Direction.South;
                             break;
-                        case KeyCode.TCODK_CHAR:
+                        case TCODKeyCode.Char:
 
-                            switch (secondKeyPress.Character)
-                            {
-                                case 101:
-                                    direction = Direction.Northeast;
-                                    break;
-                                case 113:
-                                    direction = Direction.Northwest;
-                                    break;
-                                case 119:
-                                    direction = Direction.North;
-                                    break;
-                                case 100:
-                                    direction = Direction.East;
-                                    break;
-                                case 97:
-                                    direction = Direction.West;
-                                    break;
-                                case 99:
-                                    direction = Direction.Southeast;
-                                    break;
-                                case 120:
-                                    direction = Direction.South;
-                                    break;
-                                case 122:
-                                    direction = Direction.Southwest;
-                                    break;
+                            //switch (secondKeyPress.Character)
+                            //{
+                            //    case 101:
+                            //        direction = Direction.Northeast;
+                            //        break;
+                            //    case 113:
+                            //        direction = Direction.Northwest;
+                            //        break;
+                            //    case 119:
+                            //        direction = Direction.North;
+                            //        break;
+                            //    case 100:
+                            //        direction = Direction.East;
+                            //        break;
+                            //    case 97:
+                            //        direction = Direction.West;
+                            //        break;
+                            //    case 99:
+                            //        direction = Direction.Southeast;
+                            //        break;
+                            //    case 120:
+                            //        direction = Direction.South;
+                            //        break;
+                            //    case 122:
+                            //        direction = Direction.Southwest;
+                            //        break;
 
-                                default:
-                                    break;
-                            }
+                            //    default:
+                            //        break;
+                            //}
 
                             break;
                         default:
@@ -237,50 +237,50 @@ namespace LastManStanding.Domain.AI
                     if (target != null) commandBuffer.Enqueue(commandFactory.BuildAttackCommand(Host, target));
                     
                     break;
-                case KeyCode.TCODK_CHAR:
+                case TCODKeyCode.Char:
 
-                    switch(firstKeyPress.Character)
-                    {
-                        case 101:
-                            commandBuffer.Enqueue(commandFactory.BuildMoveCommand(Host, Direction.Northeast));
-                            keyBuffer.Dequeue();
-                            break;
-                        case 113:
-                            commandBuffer.Enqueue(commandFactory.BuildMoveCommand(Host, Direction.Northwest));
-                            keyBuffer.Dequeue();
-                            break;
-                        case 119:
-                            commandBuffer.Enqueue(commandFactory.BuildMoveCommand(Host, Direction.North));
-                            keyBuffer.Dequeue();
-                            break;
-                        case 100:
-                            commandBuffer.Enqueue(commandFactory.BuildMoveCommand(Host, Direction.East));
-                            keyBuffer.Dequeue();
-                            break;
-                        case 97:
-                            commandBuffer.Enqueue(commandFactory.BuildMoveCommand(Host, Direction.West));
-                            keyBuffer.Dequeue();
-                            break;
-                        case 115:
-                            commandBuffer.Enqueue(new SkipTurnCommand(Host));
-                            keyBuffer.Dequeue();
-                            break;
-                        case 99:
-                            commandBuffer.Enqueue(commandFactory.BuildMoveCommand(Host, Direction.Southeast));
-                            keyBuffer.Dequeue();
-                            break;
-                        case 120:
-                            commandBuffer.Enqueue(commandFactory.BuildMoveCommand(Host, Direction.South));
-                            keyBuffer.Dequeue();
-                            break;
-                        case 122:
-                            commandBuffer.Enqueue(commandFactory.BuildMoveCommand(Host, Direction.Southwest));
-                            keyBuffer.Dequeue();
-                            break;
+                    //switch(firstKeyPress.Character)
+                    //{
+                    //    case 101:
+                    //        commandBuffer.Enqueue(commandFactory.BuildMoveCommand(Host, Direction.Northeast));
+                    //        keyBuffer.Dequeue();
+                    //        break;
+                    //    case 113:
+                    //        commandBuffer.Enqueue(commandFactory.BuildMoveCommand(Host, Direction.Northwest));
+                    //        keyBuffer.Dequeue();
+                    //        break;
+                    //    case 119:
+                    //        commandBuffer.Enqueue(commandFactory.BuildMoveCommand(Host, Direction.North));
+                    //        keyBuffer.Dequeue();
+                    //        break;
+                    //    case 100:
+                    //        commandBuffer.Enqueue(commandFactory.BuildMoveCommand(Host, Direction.East));
+                    //        keyBuffer.Dequeue();
+                    //        break;
+                    //    case 97:
+                    //        commandBuffer.Enqueue(commandFactory.BuildMoveCommand(Host, Direction.West));
+                    //        keyBuffer.Dequeue();
+                    //        break;
+                    //    case 115:
+                    //        commandBuffer.Enqueue(new SkipTurnCommand(Host));
+                    //        keyBuffer.Dequeue();
+                    //        break;
+                    //    case 99:
+                    //        commandBuffer.Enqueue(commandFactory.BuildMoveCommand(Host, Direction.Southeast));
+                    //        keyBuffer.Dequeue();
+                    //        break;
+                    //    case 120:
+                    //        commandBuffer.Enqueue(commandFactory.BuildMoveCommand(Host, Direction.South));
+                    //        keyBuffer.Dequeue();
+                    //        break;
+                    //    case 122:
+                    //        commandBuffer.Enqueue(commandFactory.BuildMoveCommand(Host, Direction.Southwest));
+                    //        keyBuffer.Dequeue();
+                    //        break;
 
-                        default:
-                            break;
-                    }
+                    //    default:
+                    //        break;
+                    //}
 
                     break;
                 default:

@@ -18,25 +18,13 @@ using LastManStanding.Domain.Terrain.Generation.CorridorGeneration;
 using LastManStanding.Domain.Terrain.Generation.DoorGeneration;
 using LastManStanding.Domain.Terrain.Generation.RoomGeneration;
 using LastManStanding.Domain.Terrain.TerrainTypes;
-using log4net;
+using NLog;
 
 namespace LastManStanding.Domain.Terrain
 {
     public class DungeonGenerator
     {
-        private static ILog logger;
-        private static ILog Logger
-        {
-            get
-            {
-                if (logger == null)
-                {
-                    log4net.Config.XmlConfigurator.Configure();
-                    logger = LogManager.GetLogger(typeof(DungeonGenerator));
-                }
-                return logger;
-            }
-        }
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         public Size MinSize { get; set; }
         public Size MaxSize { get; set; }

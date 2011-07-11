@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using LastManStanding.Domain.FieldOfView;
 using LastManStanding.Domain.Terrain;
+using libtcod;
 
 namespace LastManStanding.Domain.Lighting
 {
@@ -59,12 +60,12 @@ namespace LastManStanding.Domain.Lighting
             }
         }
 
-        private static libtcodWrapper.Color ToLibtcodColor(Color source)
+        private static TCODColor ToLibtcodColor(Color source)
         {
-            return libtcodWrapper.Color.FromRGB(source.R, source.G, source.B);
+            return new TCODColor(source.R, source.G, source.B);
         }
 
-        private static Color FromLibtcodColor(libtcodWrapper.Color source)
+        private static Color FromLibtcodColor(TCODColor source)
         {
             return Color.FromArgb(1, source.Red, source.Green, source.Blue);
         }
